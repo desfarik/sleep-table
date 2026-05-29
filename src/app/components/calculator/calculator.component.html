@@ -20,7 +20,7 @@
       <thead>
         <tr>
           <th class="row-label">Параметр</th>
-          @for (dayName of dayNames; track dayName; let i = $index) {
+          @for (dayName of dayNames; track dayName;) {
             <th class="day-column">
               <span class="day-name">{{ dayName }}</span>
             </th>
@@ -31,10 +31,10 @@
         <!-- Подъём -->
         <tr class="input-row">
           <td class="row-label">Подъём</td>
-          @for (day of days(); track day; let i = $index) {
+          @for (day of days(); let i = $index; track i;) {
             <td>
               <app-time-input
-                [ngModel]="getTimeValue(i, 'wakeUp')"
+                [ngModel]="day.wakeUp"
                 (ngModelChange)="onTimeChange(i, 'wakeUp', $event)"
               />
             </td>
@@ -62,15 +62,15 @@
             </span>
             </div>
           </td>
-          @for (day of days(); track day; let i = $index) {
+          @for (day of days(); let i = $index; track i;) {
             <td class="ds-cell">
               <div class="time-range-vertical">
                 <app-time-input
-                  [ngModel]="getTimeValue(i, 'ds1Start')"
+                  [(ngModel)]="day.ds1Start"
                   (ngModelChange)="onTimeChange(i, 'ds1Start', $event)"
                 />
                 <app-time-input
-                  [ngModel]="getTimeValue(i, 'ds1End')"
+                  [(ngModel)]="day.ds1End"
                   (ngModelChange)="onTimeChange(i, 'ds1End', $event)"
                 />
               </div>
@@ -109,15 +109,15 @@
             </span>
             </div>
           </td>
-          @for (day of days(); track day; let i = $index) {
+          @for (day of days(); let i = $index; track i;) {
             <td class="ds-cell">
               <div class="time-range-vertical">
                 <app-time-input
-                  [ngModel]="getTimeValue(i, 'ds2Start')"
+                  [(ngModel)]="day.ds2Start"
                   (ngModelChange)="onTimeChange(i, 'ds2Start', $event)"
                 />
                 <app-time-input
-                  [ngModel]="getTimeValue(i, 'ds2End')"
+                  [(ngModel)]="day.ds2End"
                   (ngModelChange)="onTimeChange(i, 'ds2End', $event)"
                 />
               </div>
@@ -156,15 +156,15 @@
             </span>
             </div>
           </td>
-          @for (day of days(); track day; let i = $index) {
+          @for (day of days(); let i = $index; track i;) {
             <td class="ds-cell">
               <div class="time-range-vertical">
                 <app-time-input
-                  [ngModel]="getTimeValue(i, 'ds3Start')"
+                  [(ngModel)]="day.ds3Start"
                   (ngModelChange)="onTimeChange(i, 'ds3Start', $event)"
                 />
                 <app-time-input
-                  [ngModel]="getTimeValue(i, 'ds3End')"
+                  [(ngModel)]="day.ds3End"
                   (ngModelChange)="onTimeChange(i, 'ds3End', $event)"
                 />
               </div>
@@ -195,10 +195,10 @@
         <!-- Отбой -->
         <tr class="input-row">
           <td class="row-label">Отбой</td>
-          @for (day of days(); track day; let i = $index) {
+          @for (day of days(); let i = $index; track i;) {
             <td>
               <app-time-input
-                [ngModel]="getTimeValue(i, 'bedtime')"
+                [ngModel]="day.bedtime"
                 (ngModelChange)="onTimeChange(i, 'bedtime', $event)"
               />
             </td>
@@ -246,10 +246,4 @@
       </tbody>
     </table>
   </div>
-
-  @if (saveStatus() === 'saving') {
-    <div class="save-indicator">Сохранение...</div>
-  } @else if (saveStatus() === 'saved') {
-    <div class="save-indicator saved">✓ Сохранено</div>
-  }
 </div>

@@ -1,7 +1,6 @@
 <div class="home-container">
   <header class="header">
-    <h1>Сон малыша</h1>
-    <p class="subtitle">Трекер циклов сна и бодрствования</p>
+    <h1>Трекер циклов сна и бодрствования малыша</h1>
   </header>
 
   <div class="actions">
@@ -12,7 +11,7 @@
 
   <section class="records-section">
     <h2>Сохранённые расчёты</h2>
-    
+
     @if (service.records().length === 0) {
       <div class="empty-state">
         <p>Нет сохранённых записей</p>
@@ -26,7 +25,7 @@
               <h3>{{ record.name }}</h3>
               <span class="record-date">{{ record.updatedAt | date:'dd.MM.yyyy HH:mm' }}</span>
             </div>
-            
+
             <div class="record-preview">
               @for (day of record.days; track day; let i = $index) {
                 @if (day.wakeUp !== null || day.bedtime !== null) {
@@ -47,7 +46,7 @@
                 }
               }
             </div>
-            
+
             <div class="record-actions">
               <a [routerLink]="['/calculator', record.id]" class="btn btn-small">
                 Редактировать

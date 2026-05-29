@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, effect } from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SleepStorageService } from '../../services/sleep-storage.service';
@@ -31,7 +31,6 @@ export class CalculatorComponent {
 
   record = signal<ReturnType<typeof createEmptySleepRecord> | null>(null);
   recordName = signal<string>('');
-  saveStatus = signal<'idle' | 'saving' | 'saved'>('idle');
 
   isEditMode = computed(() => !!this.record()?.id);
 
@@ -40,7 +39,7 @@ export class CalculatorComponent {
     if (!rec) {
       return Array(7).fill(null).map(() => createEmptyDayData()) as DaySleepData[];
     }
-    return [...rec.days];
+    return rec.days;
   });
 
   summaries = computed(() => {
@@ -48,20 +47,19 @@ export class CalculatorComponent {
   });
 
   constructor() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const record = this.storage.getRecord(id);
-      if (record) {
-        this.record.set(record);
-        this.recordName.set(record.name);
-      } else {
-        this.router.navigate(['/']);
-      }
+    const id = this.route.snapshot.paramMap.get('id') || '';
+    const record = this.storage.getRecord(id);
+    if (record) {
+      this.record.set(record);
+      this.recordName.set(record.name);
     } else {
-      const newRecord = createEmptySleepRecord();
+      const newRecord = this.storage.createRecord();
       this.record.set(newRecord);
       this.recordName.set(newRecord.name);
     }
+    effect(() => {
+      console.log(this.record());
+    });
   }
 
   protected onNameChange(event: Event): void {
@@ -79,36 +77,13 @@ export class CalculatorComponent {
 
     const newDays = [...rec.days] as typeof rec.days;
     newDays[dayIndex] = { ...newDays[dayIndex], [field]: minutes };
-    
-    this.record.set({ ...rec, days: newDays });
-    this.storage.updateRecord({ ...rec, days: newDays });
-    
-    this.showSaveStatus();
-  }
 
-  protected getTimeValue(dayIndex: number, field: keyof DaySleepData): number | null {
-    const rec = this.record();
-    if (!rec) return null;
-    return rec.days[dayIndex][field];
+    this.record.set({ ...rec, days: newDays });
+    this.storage.updateRecord(this.record()!);
   }
 
   protected get24hWake(summary: ReturnType<typeof calculateDaySummary>): number | null {
     if (summary.total24hSleep === null) return null;
     return 24 * 60 - summary.total24hSleep;
-  }
-
-  private saveTimeout: ReturnType<typeof setTimeout> | null = null;
-
-  private showSaveStatus(): void {
-    this.saveStatus.set('saving');
-    
-    if (this.saveTimeout) {
-      clearTimeout(this.saveTimeout);
-    }
-
-    this.saveTimeout = setTimeout(() => {
-      this.saveStatus.set('saved');
-      setTimeout(() => this.saveStatus.set('idle'), 2000);
-    }, 300);
   }
 }

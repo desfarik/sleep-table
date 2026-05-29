@@ -8,7 +8,7 @@ const STORAGE_KEY = 'sleep-records';
 })
 export class SleepStorageService {
   private recordsSignal = signal<SleepRecord[]>([]);
-  
+
   /** All stored records, sorted by updatedAt descending */
   readonly records = computed(() => {
     return [...this.recordsSignal()].sort((a, b) => b.updatedAt - a.updatedAt);
@@ -39,11 +39,11 @@ export class SleepStorageService {
   }
 
   /** Creates a new empty record and returns its ID */
-  createRecord(name?: string): string {
+  createRecord(name?: string):SleepRecord {
     const record = createEmptySleepRecord(name);
     this.recordsSignal.update(records => [record, ...records]);
     this.saveToStorage();
-    return record.id;
+    return record;
   }
 
   /** Gets a record by ID */

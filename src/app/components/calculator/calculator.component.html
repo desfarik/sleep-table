@@ -1,0 +1,255 @@
+<div class="calculator-container">
+  <header class="header">
+    <a [routerLink]="['/']" class="back-btn">← Назад</a>
+    <h1>{{ isEditMode() ? 'Редактирование' : 'Новая запись' }}</h1>
+  </header>
+
+  <div class="record-name-input">
+    <label for="recordName">Название записи</label>
+    <input
+      id="recordName"
+      type="text"
+      [value]="recordName()"
+      (input)="onNameChange($event)"
+      placeholder="Введите название..."
+    />
+  </div>
+
+  <div class="table-wrapper">
+    <table class="sleep-table">
+      <thead>
+        <tr>
+          <th class="row-label">Параметр</th>
+          @for (dayName of dayNames; track dayName; let i = $index) {
+            <th class="day-column">
+              <span class="day-name">{{ dayName }}</span>
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Подъём -->
+        <tr class="input-row">
+          <td class="row-label">Подъём</td>
+          @for (day of days(); track day; let i = $index) {
+            <td>
+              <app-time-input
+                [ngModel]="getTimeValue(i, 'wakeUp')"
+                (ngModelChange)="onTimeChange(i, 'wakeUp', $event)"
+              />
+            </td>
+          }
+        </tr>
+
+        <!-- ВБ1 -->
+        <tr class="auto-row">
+          <td class="row-label">ВБ 1</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="auto-value">{{ formatDuration(summary.wakeBeforeSleep.wb1) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- ДС1 -->
+        <tr class="ds-row">
+          <td class="row-label">
+            <div class="ds-label">
+              <span class="ds-title">ДС 1</span>
+              <span class="ds-sublabels">
+              <span>от</span>
+              <span>до</span>
+            </span>
+            </div>
+          </td>
+          @for (day of days(); track day; let i = $index) {
+            <td class="ds-cell">
+              <div class="time-range-vertical">
+                <app-time-input
+                  [ngModel]="getTimeValue(i, 'ds1Start')"
+                  (ngModelChange)="onTimeChange(i, 'ds1Start', $event)"
+                />
+                <app-time-input
+                  [ngModel]="getTimeValue(i, 'ds1End')"
+                  (ngModelChange)="onTimeChange(i, 'ds1End', $event)"
+                />
+              </div>
+            </td>
+          }
+        </tr>
+
+        <!-- ДС1 Длительность -->
+        <tr class="ds-duration-row">
+          <td class="row-label ds-duration-label">Длительность</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="duration-value">{{ formatDuration(summary.ds1Duration) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- ВБ2 -->
+        <tr class="auto-row">
+          <td class="row-label">ВБ 2</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="auto-value">{{ formatDuration(summary.wakeBeforeSleep.wb2) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- ДС2 -->
+        <tr class="ds-row">
+          <td class="row-label">
+            <div class="ds-label">
+              <span class="ds-title">ДС 2</span>
+              <span class="ds-sublabels">
+              <span>от</span>
+              <span>до</span>
+            </span>
+            </div>
+          </td>
+          @for (day of days(); track day; let i = $index) {
+            <td class="ds-cell">
+              <div class="time-range-vertical">
+                <app-time-input
+                  [ngModel]="getTimeValue(i, 'ds2Start')"
+                  (ngModelChange)="onTimeChange(i, 'ds2Start', $event)"
+                />
+                <app-time-input
+                  [ngModel]="getTimeValue(i, 'ds2End')"
+                  (ngModelChange)="onTimeChange(i, 'ds2End', $event)"
+                />
+              </div>
+            </td>
+          }
+        </tr>
+
+        <!-- ДС2 Длительность -->
+        <tr class="ds-duration-row">
+          <td class="row-label ds-duration-label">Длительность</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="duration-value">{{ formatDuration(summary.ds2Duration) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- ВБ3 -->
+        <tr class="auto-row">
+          <td class="row-label">ВБ 3</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="auto-value">{{ formatDuration(summary.wakeBeforeSleep.wb3) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- ДС3 -->
+        <tr class="ds-row">
+          <td class="row-label">
+            <div class="ds-label">
+              <span class="ds-title">ДС 3</span>
+              <span class="ds-sublabels">
+              <span>от</span>
+              <span>до</span>
+            </span>
+            </div>
+          </td>
+          @for (day of days(); track day; let i = $index) {
+            <td class="ds-cell">
+              <div class="time-range-vertical">
+                <app-time-input
+                  [ngModel]="getTimeValue(i, 'ds3Start')"
+                  (ngModelChange)="onTimeChange(i, 'ds3Start', $event)"
+                />
+                <app-time-input
+                  [ngModel]="getTimeValue(i, 'ds3End')"
+                  (ngModelChange)="onTimeChange(i, 'ds3End', $event)"
+                />
+              </div>
+            </td>
+          }
+        </tr>
+
+        <!-- ДС3 Длительность -->
+        <tr class="ds-duration-row">
+          <td class="row-label ds-duration-label">Длительность</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="duration-value">{{ formatDuration(summary.ds3Duration) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- ВБ4 -->
+        <tr class="auto-row">
+          <td class="row-label">ВБ 4</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="auto-value">{{ formatDuration(summary.wakeBeforeSleep.wb4) }}</span>
+            </td>
+          }
+        </tr>
+
+        <!-- Отбой -->
+        <tr class="input-row">
+          <td class="row-label">Отбой</td>
+          @for (day of days(); track day; let i = $index) {
+            <td>
+              <app-time-input
+                [ngModel]="getTimeValue(i, 'bedtime')"
+                (ngModelChange)="onTimeChange(i, 'bedtime', $event)"
+              />
+            </td>
+          }
+        </tr>
+
+        <!-- Separator -->
+        <tr class="separator-row">
+          <td colspan="8"></td>
+        </tr>
+
+        <!-- Summary Section -->
+        <tr class="summary-row">
+          <td class="row-label summary-label">Дневной сон</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="summary-value">{{ formatDuration(summary.totalDaySleep) }}</span>
+            </td>
+          }
+        </tr>
+        <tr class="summary-row">
+          <td class="row-label summary-label">Ночной сон</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="summary-value">{{ formatDuration(summary.nightSleep) }}</span>
+            </td>
+          }
+        </tr>
+        <tr class="summary-row highlight">
+          <td class="row-label summary-label">Суточный сон <br> (утро-утро)</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="summary-value highlight">{{ formatDuration(summary.total24hSleep) }}</span>
+            </td>
+          }
+        </tr>
+        <tr class="summary-row">
+          <td class="row-label summary-label">Суточное ВБ</td>
+          @for (summary of summaries(); track summary; let i = $index) {
+            <td>
+              <span class="summary-value">{{ formatDuration(get24hWake(summary)) }}</span>
+            </td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  @if (saveStatus() === 'saving') {
+    <div class="save-indicator">Сохранение...</div>
+  } @else if (saveStatus() === 'saved') {
+    <div class="save-indicator saved">✓ Сохранено</div>
+  }
+</div>

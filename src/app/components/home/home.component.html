@@ -1,0 +1,64 @@
+<div class="home-container">
+  <header class="header">
+    <h1>Сон малыша</h1>
+    <p class="subtitle">Трекер циклов сна и бодрствования</p>
+  </header>
+
+  <div class="actions">
+    <a [routerLink]="['/calculator']" class="btn btn-primary">
+      <span class="icon">+</span> Новая запись
+    </a>
+  </div>
+
+  <section class="records-section">
+    <h2>Сохранённые расчёты</h2>
+    
+    @if (service.records().length === 0) {
+      <div class="empty-state">
+        <p>Нет сохранённых записей</p>
+        <p class="hint">Создайте первую запись для отслеживания сна</p>
+      </div>
+    } @else {
+      <div class="records-list">
+        @for (record of service.records(); track record.id) {
+          <div class="record-card">
+            <div class="record-header">
+              <h3>{{ record.name }}</h3>
+              <span class="record-date">{{ record.updatedAt | date:'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+            
+            <div class="record-preview">
+              @for (day of record.days; track day; let i = $index) {
+                @if (day.wakeUp !== null || day.bedtime !== null) {
+                  <div class="day-preview">
+                    <span class="day-label">День {{ i + 1 }}:</span>
+                    <span class="day-time">
+                      @if (day.wakeUp !== null) {
+                        подъём {{ formatTime(day.wakeUp) }}
+                      }
+                      @if (day.wakeUp !== null && day.bedtime !== null) {
+                        &nbsp;•&nbsp;
+                      }
+                      @if (day.bedtime !== null) {
+                        отбой {{ formatTime(day.bedtime) }}
+                      }
+                    </span>
+                  </div>
+                }
+              }
+            </div>
+            
+            <div class="record-actions">
+              <a [routerLink]="['/calculator', record.id]" class="btn btn-small">
+                Редактировать
+              </a>
+              <button (click)="deleteRecord(record.id)" class="btn btn-small btn-danger">
+                Удалить
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+</div>

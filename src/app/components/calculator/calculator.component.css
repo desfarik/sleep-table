@@ -70,6 +70,10 @@
   min-width: 800px;
 }
 
+.sleep-table td:first-child {
+  width: 112px;
+}
+
 .sleep-table th,
 .sleep-table td {
   padding: 12px 8px;
@@ -206,6 +210,11 @@
   font-weight: 600;
   color: #1a1a2e;
   background: #f0f0f0;
+}
+
+.summary-cell {
+  position: sticky;
+  left: 112px;
 }
 
 .summary-value {

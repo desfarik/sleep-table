@@ -207,7 +207,7 @@
 
         <!-- Separator -->
         <tr class="separator-row">
-          <td colspan="8"></td>
+          <td colspan="6"></td>
         </tr>
 
         <!-- Summary Section -->
@@ -227,11 +227,11 @@
             </td>
           }
         </tr>
-        <tr class="summary-row highlight">
+        <tr class="summary-row">
           <td class="row-label summary-label">Суточный сон <br> (утро-утро)</td>
           @for (summary of summaries(); track summary; let i = $index) {
             <td>
-              <span class="summary-value highlight">{{ formatDuration(summary.total24hSleep) }}</span>
+              <span class="summary-value">{{ formatDuration(summary.total24hSleep) }}</span>
             </td>
           }
         </tr>
@@ -242,6 +242,54 @@
               <span class="summary-value">{{ formatDuration(get24hWake(summary)) }}</span>
             </td>
           }
+        </tr>
+        <!-- Separator -->
+        <tr class="separator-row">
+          <td colspan="6"></td>
+        </tr>
+
+        <!-- Summary Section -->
+        <tr class="summary-row">
+          <td class="row-label summary-label highlight">Средний дневной сон</td>
+            <td class="summary-cell">
+              <span class="summary-value highlight">{{ formatDuration(averageSummaries().daySleep) }}</span>
+            </td>
+          <td colspan="4">
+          </td>
+        </tr>
+
+        <tr class="summary-row ">
+          <td class="row-label summary-label highlight">Средний ночной сон</td>
+          <td class="summary-cell">
+            <span class="summary-value highlight">{{ formatDuration(averageSummaries().nightSleep) }}</span>
+          </td>
+          <td colspan="4">
+          </td>
+        </tr>
+
+        <tr class="summary-row ">
+          <td class="row-label summary-label highlight">Средний суточный сон</td>
+          <td class="summary-cell">
+            <span class="summary-value highlight">{{ formatDuration(averageSummaries().total24hSleep) }}</span>
+          </td>
+          <td colspan="4">
+          </td>
+        </tr>
+        <tr class="summary-row ">
+          <td class="row-label summary-label highlight">Средне суточный ВБ</td>
+          <td class="summary-cell">
+            <span class="summary-value highlight">{{ formatDuration(averageSummaries().total24hWB) }}</span>
+          </td>
+          <td colspan="4">
+          </td>
+        </tr>
+        <tr class="summary-row">
+          <td class="row-label summary-label highlight">Среднее значение одного ВБ</td>
+          <td class="summary-cell">
+            <span class="summary-value highlight">{{ formatDuration(averageSummaries().wb) }}</span>
+          </td>
+          <td colspan="4">
+          </td>
         </tr>
       </tbody>
     </table>

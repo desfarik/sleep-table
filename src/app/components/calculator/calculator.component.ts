@@ -5,15 +5,15 @@ import { SleepStorageService } from '../../services/sleep-storage.service';
 import {
   DaySleepData,
   createEmptyDayData,
-  createEmptySleepRecord,
+  createEmptySleepRecord, SleepRecord,
 } from '../../models/sleep-record';
 import {
   formatDuration,
-  calculateDaySummary,
+  calculateDaySummary, calculateAverage, calculateFilledDays,
 } from '../../models/sleep-utils';
 import { TimeInputComponent } from '../ui/time-input.component';
 
-const DAY_NAMES = ['День 1', 'День 2', 'День 3', 'День 4', 'День 5', 'День 6', 'День 7'];
+const DAY_NAMES = ['День 1', 'День 2', 'День 3', 'День 4', 'День 5'];
 
 @Component({
   selector: 'app-calculator',
@@ -29,7 +29,7 @@ export class CalculatorComponent {
   protected readonly dayNames = DAY_NAMES;
   protected readonly formatDuration = formatDuration;
 
-  record = signal<ReturnType<typeof createEmptySleepRecord> | null>(null);
+  record = signal<SleepRecord | null>(null);
   recordName = signal<string>('');
 
   isEditMode = computed(() => !!this.record()?.id);
@@ -37,7 +37,7 @@ export class CalculatorComponent {
   days = computed(() => {
     const rec = this.record();
     if (!rec) {
-      return Array(7).fill(null).map(() => createEmptyDayData()) as DaySleepData[];
+      return Array(5).fill(null).map(() => createEmptyDayData()) as DaySleepData[];
     }
     return rec.days;
   });
@@ -45,6 +45,30 @@ export class CalculatorComponent {
   summaries = computed(() => {
     return this.days().map(day => calculateDaySummary(day));
   });
+
+  averageSummaries = computed(() => {
+    const summaries = this.summaries();
+    const daySleep = calculateAverage(summaries.map(summary => summary.totalDaySleep));
+    const nightSleep = calculateAverage(summaries.map(summary => summary.nightSleep));
+    if (daySleep === null || nightSleep === null) {
+      return {
+        daySleep,
+        nightSleep,
+        total24hSleep: null,
+        total24hWB: null,
+        wb: null,
+      }
+    }
+    const total24hSleep = daySleep + nightSleep;
+    const total24hWB = 24 * 60 - total24hSleep;
+    return {
+      daySleep,
+      nightSleep,
+      total24hSleep,
+      total24hWB,
+      wb: total24hWB / calculateFilledDays(summaries.map(summary => summary.nightSleep)),
+    }
+  })
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id') || '';

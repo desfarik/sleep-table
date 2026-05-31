@@ -5,22 +5,22 @@
 export interface DaySleepData {
   /** Wake up time in minutes from midnight (e.g., 7:00 = 420) */
   wakeUp: number | null;
-  
+
   /** Day sleep 1: start time in minutes */
   ds1Start: number | null;
   /** Day sleep 1: end time in minutes */
   ds1End: number | null;
-  
+
   /** Day sleep 2: start time in minutes (optional) */
   ds2Start: number | null;
   /** Day sleep 2: end time in minutes (optional) */
   ds2End: number | null;
-  
+
   /** Day sleep 3: start time in minutes (optional) */
   ds3Start: number | null;
   /** Day sleep 3: end time in minutes (optional) */
   ds3End: number | null;
-  
+
   /** Bedtime in minutes from midnight */
   bedtime: number | null;
 }
@@ -58,9 +58,9 @@ export function createEmptyDayData(): DaySleepData {
 export function createEmptySleepRecord(name?: string): SleepRecord {
   return {
     id: crypto.randomUUID(),
-    name: name || `Запись ${new Date().toLocaleDateString('ru-RU')}`,
+    name: name || `Запись от ${new Date().toLocaleDateString('ru-RU')}`,
     createdAt: Date.now(),
     updatedAt: Date.now(),
-    days: Array(7).fill(null).map(() => createEmptyDayData()) as [DaySleepData, DaySleepData, DaySleepData, DaySleepData, DaySleepData, DaySleepData, DaySleepData],
+    days: Array(5).fill(null).map(() => createEmptyDayData()) as [DaySleepData, DaySleepData, DaySleepData, DaySleepData, DaySleepData, DaySleepData, DaySleepData],
   };
 }

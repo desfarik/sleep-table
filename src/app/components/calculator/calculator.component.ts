@@ -9,7 +9,7 @@ import {
 } from '../../models/sleep-record';
 import {
   formatDuration,
-  calculateDaySummary, calculateAverage, calculateFilledDays,
+  calculateDaySummary, calculateAverage, calculateFilledDays, calculateAverageWb,
 } from '../../models/sleep-utils';
 import { TimeInputComponent } from '../ui/time-input.component';
 
@@ -66,7 +66,7 @@ export class CalculatorComponent {
       nightSleep,
       total24hSleep,
       total24hWB,
-      wb: total24hWB / calculateFilledDays(summaries.map(summary => summary.nightSleep)),
+      wb: calculateAverageWb(this.summaries()),
     }
   })
 

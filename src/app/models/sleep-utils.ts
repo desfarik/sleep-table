@@ -235,12 +235,30 @@ export function calculateAverage(values: Array<number | null>): number | null {
   if (nonNullValues.length === 0) {
     return null;
   }
-  return nonNullValues.reduce((sum, v) => sum + v, 0) / nonNullValues.length;
+  return Math.round(nonNullValues.reduce((sum, v) => sum + v, 0) / nonNullValues.length);
 
 }
 
 export function calculateFilledDays(values: Array<number | null>): number {
   return values.filter(value => value !== null).length;
+}
+
+export function calculateAverageWb(summaries: {
+  ds1Duration: number | null;
+  ds2Duration: number | null;
+  ds3Duration: number | null;
+  totalDaySleep: number | null;
+  nightSleep: number | null;
+  total24hSleep: number | null;
+  wakeBeforeSleep: {wb1: number | null; wb2: number | null; wb3: number | null; wb4: number | null}
+}[]) {
+  const wbs: (number | null)[] = [];
+  summaries.forEach(sum => {
+    wbs.push(sum.wakeBeforeSleep.wb1, sum.wakeBeforeSleep.wb2, sum.wakeBeforeSleep.wb3, sum.wakeBeforeSleep.wb4);
+  })
+  const nonNullWbs = wbs.filter(wb => wb !== null);
+  return Math.round(nonNullWbs.reduce((sum, wb) => sum + wb, 0) / nonNullWbs.length);
+
 }
 
 /**
